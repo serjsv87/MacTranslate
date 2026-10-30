@@ -250,6 +250,7 @@ public final class TranslationEngine: @unchecked Sendable {
         }
         
         // 1. Attempt on-device Apple Neural Engine translation
+        #if compiler(>=6.4)
         if #available(macOS 26.0, *) {
             let key = "\(s)->\(t)"
             do {
@@ -267,16 +268,11 @@ public final class TranslationEngine: @unchecked Sendable {
                 
                 let response = try await session.translate(trimmed)
                 return TranslationResult(text: response.targetText, isCloudFallback: false)
-            } catch TranslationError.notInstalled {
-                // Fall through to cloud translation
-            } catch TranslationError.unsupportedLanguagePairing,
-                    TranslationError.unsupportedSourceLanguage,
-                    TranslationError.unsupportedTargetLanguage {
-                // Fall through to cloud translation
             } catch {
-                // For other errors, attempt cloud fallback before failing
+                // Fall through to cloud translation
             }
         }
+        #endif
         
         // 2. Cloud Fallback when offline model is not installed
         do {

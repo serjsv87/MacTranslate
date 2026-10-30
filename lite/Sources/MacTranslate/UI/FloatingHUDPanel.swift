@@ -11,7 +11,7 @@ public final class FloatingHUDPanel: NSPanel {
     public weak var panelDelegate: FloatingHUDPanelDelegate?
     public let hudContentView: HUDContentView
     
-    private var globalClickMonitor: Any?
+    nonisolated(unsafe) private var globalClickMonitor: Any?
     
     public init() {
         self.hudContentView = HUDContentView(frame: NSRect(x: 0, y: 0, width: 480, height: 280))
@@ -130,7 +130,9 @@ public final class FloatingHUDPanel: NSPanel {
         }
     }
     
-    isolated deinit {
-        removeOutsideClickMonitor()
+    deinit {
+        if let monitor = globalClickMonitor {
+            NSEvent.removeMonitor(monitor)
+        }
     }
 }
