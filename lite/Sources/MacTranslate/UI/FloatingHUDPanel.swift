@@ -64,16 +64,6 @@ public final class FloatingHUDPanel: NSPanel {
             dismiss()
             return
         }
-        let isVKey = (event.keyCode == 9)
-        let hasCmd = event.modifierFlags.contains(.command)
-        let hasCtrl = event.modifierFlags.contains(.control)
-        if isVKey && (hasCmd || hasCtrl) {
-            let target = hudContentView.targetText.trimmingCharacters(in: .whitespacesAndNewlines)
-            if !target.isEmpty {
-                hudContentView.replaceClicked()
-                return
-            }
-        }
         super.keyDown(with: event)
     }
     

@@ -43,18 +43,6 @@ final class SourceTextView: NSTextView {
             onCommandEnter?()
             return
         }
-        let isVKey = (event.keyCode == 9)
-        let hasCmd = event.modifierFlags.contains(.command)
-        let hasCtrl = event.modifierFlags.contains(.control)
-        if isVKey && (hasCmd || hasCtrl) {
-            if let handled = onCommandV?(), handled {
-                return
-            }
-            if hasCtrl {
-                self.paste(nil)
-                return
-            }
-        }
         super.keyDown(with: event)
     }
 }
@@ -399,8 +387,6 @@ public final class HUDContentView: NSView {
         replaceButton.translatesAutoresizingMaskIntoConstraints = false
         replaceButton.title = L10n("hud.replace")
         replaceButton.bezelStyle = .rounded
-        replaceButton.keyEquivalent = "v"
-        replaceButton.keyEquivalentModifierMask = [.command]
         replaceButton.target = self
         replaceButton.action = #selector(replaceClicked)
         addSubview(replaceButton)
@@ -653,7 +639,7 @@ public final class HUDContentView: NSView {
         showToast(L10n("hud.toast_replaced"))
         delegate?.hudContentViewDidRequestReplace(self, text: text)
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
             self?.isReplacingText = false
         }
     }

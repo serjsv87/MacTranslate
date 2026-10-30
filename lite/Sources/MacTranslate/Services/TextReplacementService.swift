@@ -105,27 +105,20 @@ public final class TextReplacementService: @unchecked Sendable {
         let cmdUp = CGEvent(keyboardEventSource: src, virtualKey: cmdKeyCode, keyDown: false)
         cmdUp?.flags = []
         
-        // Post sequence to annotated session event tap (delivers to active session front window)
-        cmdDown?.post(tap: .cgAnnotatedSessionEventTap)
-        vDown?.post(tap: .cgAnnotatedSessionEventTap)
-        usleep(25000) // 25ms hold time
-        vUp?.post(tap: .cgAnnotatedSessionEventTap)
-        cmdUp?.post(tap: .cgAnnotatedSessionEventTap)
-        
-        // Post sequence to standard session event tap
-        cmdDown?.post(tap: .cgSessionEventTap)
-        vDown?.post(tap: .cgSessionEventTap)
-        usleep(20000)
-        vUp?.post(tap: .cgSessionEventTap)
-        cmdUp?.post(tap: .cgSessionEventTap)
-        
-        // Post directly to target app PID if available as targeted backup
+        // Post EXACTLY ONCE to avoid duplicate pasting:
+        // If targetApp PID is specified, dispatch directly to target process; otherwise to active session.
         if let pid = targetApp?.processIdentifier, pid != ProcessInfo.processInfo.processIdentifier {
             cmdDown?.postToPid(pid)
             vDown?.postToPid(pid)
-            usleep(20000)
+            usleep(25000)
             vUp?.postToPid(pid)
             cmdUp?.postToPid(pid)
+        } else {
+            cmdDown?.post(tap: .cgAnnotatedSessionEventTap)
+            vDown?.post(tap: .cgAnnotatedSessionEventTap)
+            usleep(25000)
+            vUp?.post(tap: .cgAnnotatedSessionEventTap)
+            cmdUp?.post(tap: .cgAnnotatedSessionEventTap)
         }
     }
 }
