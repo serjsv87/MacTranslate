@@ -1,0 +1,13 @@
+.DS_Store
+.build/
+*/.build/
+*.app/
+*/*.app/
+*.dmg
+*/*.dmg
+Packages/
+xcuserdata/
+DerivedData/
+.swiftpm/
+.netrc
+.agents/
