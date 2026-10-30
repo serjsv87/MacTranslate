@@ -77,17 +77,42 @@ EOF
 
 echo "✓ ${APP_BUNDLE} created successfully!"
 
-echo "4. Packaging into ${DMG_NAME}..."
-DMG_TEMP_DIR="$(mktemp -d -t mactranslate_dmg)"
-cp -R "${APP_BUNDLE}" "${DMG_TEMP_DIR}/"
-ln -s /Applications "${DMG_TEMP_DIR}/Applications"
+echo "4. Packaging Application..."
+ZIP_NAME="${APP_NAME}.zip"
+ditto -c -k --sequesterRsrc --keepParent "${APP_BUNDLE}" "${ZIP_NAME}"
+echo "✓ ${ZIP_NAME} created successfully!"
+
+echo "Packaging into ${DMG_NAME}..."
+DMG_STAGING="${PROJECT_DIR}/.dmg_staging"
+rm -rf "${DMG_STAGING}"
+mkdir -p "${DMG_STAGING}"
+cp -R "${APP_BUNDLE}" "${DMG_STAGING}/"
+ln -s /Applications "${DMG_STAGING}/Applications" || true
 
 rm -f "${DMG_NAME}"
-hdiutil create -volname "${APP_NAME}" -srcfolder "${DMG_TEMP_DIR}" -ov -format UDZO "${DMG_NAME}"
-rm -rf "${DMG_TEMP_DIR}"
+sync
+
+DMG_CREATED=0
+for attempt in 1 2 3; do
+    echo "Attempt $attempt: creating DMG with Applications shortcut..."
+    if hdiutil create -volname "${APP_NAME}" -srcfolder "${DMG_STAGING}" -ov -format UDZO "${DMG_NAME}"; then
+        DMG_CREATED=1
+        break
+    fi
+    echo "Attempt $attempt failed, retrying in 3 seconds..."
+    sleep 3
+done
+
+if [ "$DMG_CREATED" -ne 1 ]; then
+    echo "Fallback: creating DMG directly from app bundle..."
+    hdiutil create -volname "${APP_NAME}" -srcfolder "${APP_BUNDLE}" -ov -format UDZO "${DMG_NAME}"
+fi
+
+rm -rf "${DMG_STAGING}"
 
 echo "============================================="
-echo "  SUCCESS! MacTranslate Application & DMG Ready!"
+echo "  SUCCESS! MacTranslate Application Ready!"
 echo "  - Bundle: ${PROJECT_DIR}/${APP_BUNDLE}"
 echo "  - DMG:    ${PROJECT_DIR}/${DMG_NAME}"
+echo "  - ZIP:    ${PROJECT_DIR}/${ZIP_NAME}"
 echo "============================================="
