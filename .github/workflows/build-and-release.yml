@@ -41,10 +41,6 @@ jobs:
           ./build_app.sh > ../build.log 2>&1 || BUILD_FAILED=1
           cd ..
           cat build.log
-          echo "### Build Log" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          tail -n 100 build.log >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
           if [ "$BUILD_FAILED" = "1" ]; then
             echo "Build script failed!"
             exit 1
@@ -52,6 +48,17 @@ jobs:
           if [ -f "lite/MacTranslate.dmg" ]; then cp lite/MacTranslate.dmg MacTranslate.dmg; fi
           if [ -f "lite/MacTranslate.zip" ]; then cp lite/MacTranslate.zip MacTranslate.zip; fi
           ls -la MacTranslate.*
+
+      - name: Push Diagnostics Branch On Failure
+        if: failure()
+        run: |
+          git config user.name "CI Bot"
+          git config user.email "bot@ci.local"
+          git checkout -B ci-diagnostics
+          cp build.log ci-diagnostics.txt
+          git add ci-diagnostics.txt
+          git commit -m "ci diagnostics [skip ci]"
+          git push -f origin ci-diagnostics
 
       - name: Upload DMG & ZIP Artifacts
         uses: actions/upload-artifact@v4
