@@ -76,7 +76,8 @@ public final class DoubleTapDetector: @unchecked Sendable {
         defer { lock.unlock() }
         
         // 1. Alternate hotkey check (Option+Space: 49, Option+T: 17)
-        if (mode == nil || mode == .alternate) && event.isAlternate && !event.isCommand && !event.isControl {
+        // Only trigger if mode is explicitly set to .alternate
+        if mode == .alternate && event.isAlternate && !event.isCommand && !event.isControl {
             if event.keyCode == 49 || event.keyCode == 17 {
                 return .alternate
             }
@@ -154,6 +155,11 @@ public final class HotkeyManager: @unchecked Sendable {
     
     public func setMode(_ mode: HotkeyMode) {
         self.mode = mode
+        if mode == .alternate {
+            installCarbonHotKeys()
+        } else {
+            uninstallCarbonHotKeys()
+        }
     }
     
     public func setTimingWindow(_ seconds: TimeInterval) {
@@ -211,8 +217,10 @@ public final class HotkeyManager: @unchecked Sendable {
         // Strategy 2: NSEvent monitors (active in parallel for reliable event capture)
         installNSEventMonitors()
         
-        // Strategy 3: Carbon Hotkeys (zero-permission guaranteed global interception for ⌥Space)
-        installCarbonHotKeys()
+        // Strategy 3: Carbon Hotkeys (only if alternate mode is selected, to avoid intercepting ⌥Space from other apps like Gemini)
+        if mode == .alternate {
+            installCarbonHotKeys()
+        }
         
         // Strategy 4: Pasteboard double-copy monitor (zero-permission guaranteed fallback for double ⌘C)
         startClipboardMonitor()
