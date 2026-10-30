@@ -89,13 +89,18 @@ mkdir -p "${DMG_STAGING}"
 cp -R "${APP_BUNDLE}" "${DMG_STAGING}/"
 ln -s /Applications "${DMG_STAGING}/Applications" || true
 
+# Strip file flags and extended attributes to prevent macOS 15 hdiutil FB15923924 bug
+chflags -R nouchg "${DMG_STAGING}" "${APP_BUNDLE}" 2>/dev/null || true
+xattr -rc "${DMG_STAGING}" "${APP_BUNDLE}" 2>/dev/null || true
+hdiutil detach "/Volumes/${APP_NAME}" -force 2>/dev/null || true
+
 rm -f "${DMG_NAME}"
 sync
 
 DMG_CREATED=0
 for attempt in 1 2 3; do
     echo "Attempt $attempt: creating DMG with Applications shortcut..."
-    if hdiutil create -volname "${APP_NAME}" -srcfolder "${DMG_STAGING}" -ov -format UDZO "${DMG_NAME}"; then
+    if hdiutil create -volname "${APP_NAME}" -srcfolder "${DMG_STAGING}" -ov -format UDZO -fs HFS+ -nospotlight "${DMG_NAME}"; then
         DMG_CREATED=1
         break
     fi
@@ -105,7 +110,7 @@ done
 
 if [ "$DMG_CREATED" -ne 1 ]; then
     echo "Fallback: creating DMG directly from app bundle..."
-    hdiutil create -volname "${APP_NAME}" -srcfolder "${APP_BUNDLE}" -ov -format UDZO "${DMG_NAME}"
+    hdiutil create -volname "${APP_NAME}" -srcfolder "${APP_BUNDLE}" -ov -format UDZO -fs HFS+ -nospotlight "${DMG_NAME}" || true
 fi
 
 rm -rf "${DMG_STAGING}"

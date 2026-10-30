@@ -37,8 +37,10 @@ jobs:
           cd lite
           chmod +x build_app.sh
           bash -x ./build_app.sh
-          cp MacTranslate.dmg ../MacTranslate.dmg
-          cp MacTranslate.zip ../MacTranslate.zip
+          if [ -f "MacTranslate.dmg" ]; then cp MacTranslate.dmg ../MacTranslate.dmg; fi
+          if [ -f "MacTranslate.zip" ]; then cp MacTranslate.zip ../MacTranslate.zip; fi
+          cd ..
+          ls -la MacTranslate.*
 
       - name: Upload DMG & ZIP Artifacts
         uses: actions/upload-artifact@v4
