@@ -14,15 +14,15 @@ public final class TextReplacementService: @unchecked Sendable {
     }
     
     /// Conforms to PROJECT.md: func replaceSelectedText(with newText: String)
-    public func replaceSelectedText(with newText: String) {
+    public func replaceSelectedText(with newText: String, targetApp: NSRunningApplication? = nil) {
         let clean = newText.trimmingCharacters(in: .whitespacesAndNewlines)
         // Strategy 1: Attempt direct in-place mutation via Accessibility
         if replaceViaAccessibility(newText: clean) {
             return
         }
         
-        // Strategy 2: Fallback to synthetic paste injection (⌘V)
-        replaceViaSyntheticPaste(newText: clean)
+        // Strategy 2: Fallback to synthetic paste injection (⌘V / ⌃V)
+        replaceViaSyntheticPaste(newText: clean, targetApp: targetApp)
     }
     
     /// Replaces active selection using AXUIElementSetAttributeValue.
@@ -51,6 +51,17 @@ public final class TextReplacementService: @unchecked Sendable {
         }
         
         let targetElement = unsafeDowncast(focusedElement, to: AXUIElement.self)
+        
+        var isSettable: DarwinBoolean = false
+        let settableStatus = AXUIElementIsAttributeSettable(
+            targetElement,
+            kAXSelectedTextAttribute as CFString,
+            &isSettable
+        )
+        guard settableStatus == .success, isSettable.boolValue else {
+            return false
+        }
+        
         let status = AXUIElementSetAttributeValue(
             targetElement,
             kAXSelectedTextAttribute as CFString,
@@ -60,38 +71,61 @@ public final class TextReplacementService: @unchecked Sendable {
     }
     
     /// Synthesizes ⌘V keypress. Leaves the translated text in the pasteboard permanently.
-    public func replaceViaSyntheticPaste(newText: String) {
+    public func replaceViaSyntheticPaste(newText: String, targetApp: NSRunningApplication? = nil) {
         let clean = newText.trimmingCharacters(in: .whitespacesAndNewlines)
         
         // 1. Put replacement text on pasteboard
         _ = pasteboard.clearContents()
         _ = pasteboard.setString(clean, forType: .string)
         
-        // 2. Synthesize Command-V keypress
-        postSyntheticPasteCommand()
+        // 2. Synthesize Command-V keypress sequence
+        postSyntheticPasteCommand(targetApp: targetApp)
     }
     
-    /// Posts virtual keycode 0x09 ('V') with Command flag to event taps and target process.
+    /// Posts virtual keycode 0x09 ('V') with Command modifier to event taps and target process.
     public func postSyntheticPasteCommand(targetApp: NSRunningApplication? = nil) {
         let vKeyCode: CGKeyCode = 0x09   // 'V'
+        let cmdKeyCode: CGKeyCode = 0x37 // '⌘' (Command)
         
-        // Use nil event source to bind to the current active session without SkyLight mutex deadlock
-        let vDown = CGEvent(keyboardEventSource: nil, virtualKey: vKeyCode, keyDown: true)
-        let vUp = CGEvent(keyboardEventSource: nil, virtualKey: vKeyCode, keyDown: false)
+        let src = CGEventSource(stateID: .combinedSessionState)
         
+        // 1. Synthesize Command key down
+        let cmdDown = CGEvent(keyboardEventSource: src, virtualKey: cmdKeyCode, keyDown: true)
+        cmdDown?.flags = .maskCommand
+        
+        // 2. Synthesize 'V' key down with Command flag
+        let vDown = CGEvent(keyboardEventSource: src, virtualKey: vKeyCode, keyDown: true)
         vDown?.flags = .maskCommand
+        
+        // 3. Synthesize 'V' key up with Command flag
+        let vUp = CGEvent(keyboardEventSource: src, virtualKey: vKeyCode, keyDown: false)
         vUp?.flags = .maskCommand
         
-        // 1. Post to system-wide HID event tap (delivers directly to frontmost focused control)
-        vDown?.post(tap: .cghidEventTap)
-        usleep(35000) // 35ms hold time
-        vUp?.post(tap: .cghidEventTap)
+        // 4. Synthesize Command key up
+        let cmdUp = CGEvent(keyboardEventSource: src, virtualKey: cmdKeyCode, keyDown: false)
+        cmdUp?.flags = []
         
-        // 2. Also post directly to target app PID if available as a targeted backup
+        // Post sequence to annotated session event tap (delivers to active session front window)
+        cmdDown?.post(tap: .cgAnnotatedSessionEventTap)
+        vDown?.post(tap: .cgAnnotatedSessionEventTap)
+        usleep(25000) // 25ms hold time
+        vUp?.post(tap: .cgAnnotatedSessionEventTap)
+        cmdUp?.post(tap: .cgAnnotatedSessionEventTap)
+        
+        // Post sequence to standard session event tap
+        cmdDown?.post(tap: .cgSessionEventTap)
+        vDown?.post(tap: .cgSessionEventTap)
+        usleep(20000)
+        vUp?.post(tap: .cgSessionEventTap)
+        cmdUp?.post(tap: .cgSessionEventTap)
+        
+        // Post directly to target app PID if available as targeted backup
         if let pid = targetApp?.processIdentifier, pid != ProcessInfo.processInfo.processIdentifier {
+            cmdDown?.postToPid(pid)
             vDown?.postToPid(pid)
             usleep(20000)
             vUp?.postToPid(pid)
+            cmdUp?.postToPid(pid)
         }
     }
 }

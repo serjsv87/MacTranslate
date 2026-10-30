@@ -45,7 +45,10 @@ public final class FloatingHUDPanel: NSPanel {
     }
     
     public override func performKeyEquivalent(with event: NSEvent) -> Bool {
-        if event.keyCode == 9 && event.modifierFlags.contains(.command) { // Cmd+V
+        let isVKey = (event.keyCode == 9)
+        let hasCmd = event.modifierFlags.contains(.command)
+        let hasCtrl = event.modifierFlags.contains(.control)
+        if isVKey && (hasCmd || hasCtrl) {
             let target = hudContentView.targetText.trimmingCharacters(in: .whitespacesAndNewlines)
             if !target.isEmpty {
                 hudContentView.replaceClicked()
@@ -60,6 +63,16 @@ public final class FloatingHUDPanel: NSPanel {
         if event.keyCode == 53 {
             dismiss()
             return
+        }
+        let isVKey = (event.keyCode == 9)
+        let hasCmd = event.modifierFlags.contains(.command)
+        let hasCtrl = event.modifierFlags.contains(.control)
+        if isVKey && (hasCmd || hasCtrl) {
+            let target = hudContentView.targetText.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !target.isEmpty {
+                hudContentView.replaceClicked()
+                return
+            }
         }
         super.keyDown(with: event)
     }

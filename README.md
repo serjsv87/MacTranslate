@@ -11,7 +11,7 @@
 **Ultra-fast, native macOS offline translation utility running locally on Apple Silicon.**  
 *Instant translation at your fingertips, just like DeepL — without cloud latency, character limits, or subscriptions.*
 
-[Why MacTranslate?](#-why-mactranslate-speed-convenience--zero-limits) • [Features](#-features) • [Lite vs Pro](#️-mactranslate-lite-vs-pro) • [Shortcuts](#-keyboard-shortcuts) • [Installation](#-installation) • [Permissions](#-security--permissions)
+[Why MacTranslate?](#-why-mactranslate-speed-convenience--zero-limits) • [Features](#-features) • [Lite vs Pro (soon)](#️-mactranslate-lite-vs-pro-soon) • [Shortcuts](#-keyboard-shortcuts) • [Installation](#-installation) • [Permissions](#-security--permissions)
 
 </div>
 
@@ -54,11 +54,11 @@ Most modern translation tools force you to trade away your privacy, pay monthly 
 
 ---
 
-## ⭐️ MacTranslate Lite vs Pro
+## ⭐️ MacTranslate Lite vs Pro (soon)
 
-MacTranslate is offered in two tiers: **Lite** (100% Free & Open-Source) and **Pro** (Enhanced Power Tools for Professionals & Language Learners at $12/year).
+MacTranslate is offered in two tiers: **Lite** (100% Free & Open-Source) and **Pro** (Enhanced Power Tools for Professionals & Language Learners at $12/year — **soon**).
 
-| Feature | 🆓 MacTranslate Lite (Free) | ⭐️ MacTranslate Pro ($12/yr) |
+| Feature | 🆓 MacTranslate Lite (Free) | ⭐️ MacTranslate Pro ($12/yr) *(soon)* |
 | :--- | :---: | :---: |
 | **Unlimited Offline Translations** | ✅ Included (Apple Neural Engine) | ✅ Included (Apple Neural Engine) |
 | **Global Double-Tap Hotkey (`⌘C + C`)** | ✅ Included | ✅ Included |
@@ -67,14 +67,14 @@ MacTranslate is offered in two tiers: **Lite** (100% Free & Open-Source) and **P
 | **TTS Pronunciation & Audio Synthesis** | ✅ Included | ✅ Included |
 | **Bilingual UI (English & Ukrainian)** | ✅ Included | ✅ Included |
 | **Zero Character Limits & Zero Telemetry** | ✅ 100% Free Forever | ✅ Included |
-| **📸 Screen OCR Area Translation (`⌥S`)** | ❌ (Upgrade to Pro) | ✅ **Apple Vision on-device OCR** |
-| **🎭 Live AI Tone Switcher (Business/Casual/Tech)** | ❌ (Upgrade to Pro) | ✅ **Dynamic style transformation** |
-| **🎯 Contextual App Profiles (Per-app rules)** | ❌ (Upgrade to Pro) | ✅ **Auto-adapts to active app** |
-| **📚 Vocabulary History & Anki Flashcard Export** | ❌ (Upgrade to Pro) | ✅ **1-Click CSV Spaced Repetition** |
+| **📸 Screen OCR Area Translation (`⌥S`)** | ❌ (Upgrade to Pro — soon) | ✅ **Apple Vision on-device OCR** |
+| **🎭 Live AI Tone Switcher (Business/Casual/Tech)** | ❌ (Upgrade to Pro — soon) | ✅ **Dynamic style transformation** |
+| **🎯 Contextual App Profiles (Per-app rules)** | ❌ (Upgrade to Pro — soon) | ✅ **Auto-adapts to active app** |
+| **📚 Vocabulary History & Anki Flashcard Export** | ❌ (Upgrade to Pro — soon) | ✅ **1-Click CSV Spaced Repetition** |
 
 ---
 
-## 🚀 Pro Features Overview
+## 🚀 Pro Features Overview (soon)
 
 * **📸 Screen OCR Translation (`⌥S`)**: Capture text inside YouTube subtitles, video games, protected PDFs, images, or web diagrams and translate them instantly with on-device Apple Vision.
 * **🎭 Live AI Tone Switcher**: Transform translations on the fly between **Standard**, **Formal / Business** (corporate emails), **Casual / Friendly** (chats), and **Concise / Technical** (documentation).
@@ -88,13 +88,13 @@ MacTranslate is offered in two tiers: **Lite** (100% Free & Open-Source) and **P
 | Shortcut | Description |
 | :--- | :--- |
 | **`⌘C + C`** | Trigger translation on selected text anywhere in macOS |
-| **`⌘V`** | **Instant In-Place Paste**: Switches back to active app and pastes translation |
+| **`⌘V`** / **`⌃V`** | **Instant In-Place Paste**: Switches back to active app and pastes translation |
 | **`⌘↩`** (`Cmd + Enter`) | Copy translation to clipboard and dismiss HUD |
 | **`Enter`** | Insert a newline into the source text area |
 | **`Esc`** | Dismiss floating HUD |
 | **`⌥Space`** | Alternate global trigger shortcut |
-| **`⌥S`** *(Pro)* | **Screen OCR**: Drag crosshair over any screen area to translate |
-| **`⌘H`** *(Pro)* | Open Vocabulary History and Anki Export window |
+| **`⌥S`** *(Pro — soon)* | **Screen OCR**: Drag crosshair over any screen area to translate |
+| **`⌘H`** *(Pro — soon)* | Open Vocabulary History and Anki Export window |
 | **`⌘,`** | Open Preferences / Settings window |
 
 ---

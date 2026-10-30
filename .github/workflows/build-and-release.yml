@@ -25,12 +25,15 @@ jobs:
         run: swift --version
 
       - name: Run Test Suites
-        run: swift test
+        run: |
+          cd lite && swift test
 
       - name: Build Application Bundle & DMG
         run: |
+          cd lite
           chmod +x build_app.sh
           ./build_app.sh
+          cp MacTranslate.dmg ../MacTranslate.dmg
 
       - name: Upload DMG Artifact
         uses: actions/upload-artifact@v4

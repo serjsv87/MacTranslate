@@ -23,8 +23,15 @@ final class SourceTextView: NSTextView {
             onCommandEnter?()
             return true
         }
-        if event.keyCode == 9 && event.modifierFlags.contains(.command) {
+        let isVKey = (event.keyCode == 9)
+        let hasCmd = event.modifierFlags.contains(.command)
+        let hasCtrl = event.modifierFlags.contains(.control)
+        if isVKey && (hasCmd || hasCtrl) {
             if let handled = onCommandV?(), handled {
+                return true
+            }
+            if hasCtrl {
+                self.paste(nil)
                 return true
             }
         }
@@ -36,8 +43,15 @@ final class SourceTextView: NSTextView {
             onCommandEnter?()
             return
         }
-        if event.keyCode == 9 && event.modifierFlags.contains(.command) {
+        let isVKey = (event.keyCode == 9)
+        let hasCmd = event.modifierFlags.contains(.command)
+        let hasCtrl = event.modifierFlags.contains(.control)
+        if isVKey && (hasCmd || hasCtrl) {
             if let handled = onCommandV?(), handled {
+                return
+            }
+            if hasCtrl {
+                self.paste(nil)
                 return
             }
         }

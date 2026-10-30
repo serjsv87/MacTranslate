@@ -253,16 +253,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, HUDContentViewDelegate
             if let app = appToRestore, app != NSRunningApplication.current {
                 if #available(macOS 14.0, *) {
                     NSApp.yieldActivation(to: app)
-                    app.activate()
-                } else {
-                    app.activate(options: [.activateIgnoringOtherApps])
                 }
+                app.activate(options: [.activateAllWindows, .activateIgnoringOtherApps])
             }
-            // Allow macOS window manager 150ms to refocus the text input target
-            try? await Task.sleep(nanoseconds: 150_000_000)
+            // Allow macOS window manager 180ms to refocus the text input target
+            try? await Task.sleep(nanoseconds: 180_000_000)
             
             // 4. Perform direct replacement or synthetic paste (translation remains in clipboard)
-            TextReplacementService.shared.replaceSelectedText(with: cleanText)
+            TextReplacementService.shared.replaceSelectedText(with: cleanText, targetApp: appToRestore)
         }
     }
     

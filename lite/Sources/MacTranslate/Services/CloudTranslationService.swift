@@ -45,10 +45,25 @@ public final class CloudTranslationService: @unchecked Sendable {
             throw TranslationEngineError.systemError("Cloud translation server returned error")
         }
         
-        guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let respData = json["responseData"] as? [String: Any],
+        guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            throw TranslationEngineError.systemError("Could not parse cloud translation response")
+        }
+        
+        if let statusStr = json["responseStatus"] as? String, statusStr != "200" {
+            throw TranslationEngineError.unsupportedLanguagePairing(source: sourceLang, target: targetLang)
+        }
+        if let statusInt = json["responseStatus"] as? Int, statusInt != 200 {
+            throw TranslationEngineError.unsupportedLanguagePairing(source: sourceLang, target: targetLang)
+        }
+        
+        guard let respData = json["responseData"] as? [String: Any],
               let rawTranslated = respData["translatedText"] as? String else {
             throw TranslationEngineError.systemError("Could not parse cloud translation response")
+        }
+        
+        let upper = rawTranslated.uppercased()
+        if upper.contains("INVALID SOURCE LANGUAGE") || upper.contains("INVALID TARGET LANGUAGE") || upper.contains("INVALID LANGUAGE") {
+            throw TranslationEngineError.unsupportedLanguagePairing(source: sourceLang, target: targetLang)
         }
         
         return decodeHTMLEntities(rawTranslated)

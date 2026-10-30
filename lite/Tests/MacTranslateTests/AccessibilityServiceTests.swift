@@ -135,18 +135,18 @@ struct AccessibilityServiceTests {
         #expect(mockPb.string(forType: .string) == "Injected replacement")
     }
     
-    @Test("TextReplacementService restores prior clipboard contents asynchronously")
-    func testTextReplacementServiceClipboardRestoration() async {
+    @Test("TextReplacementService leaves replacement text on pasteboard permanently")
+    func testTextReplacementServiceClipboardPersistence() async {
         let mockPb = MockPasteboard(initialString: "Original clipboard data")
         let service = TextReplacementService(pasteboard: mockPb)
         
         service.replaceViaSyntheticPaste(newText: "New translated text")
         #expect(mockPb.string(forType: .string) == "New translated text")
         
-        // Wait 350ms to allow the 250ms asynchronous restoration timer to fire on main queue
-        try? await Task.sleep(nanoseconds: 350_000_000)
+        // Wait to verify translated text remains ready for user pasting
+        try? await Task.sleep(nanoseconds: 100_000_000)
         
-        #expect(mockPb.string(forType: .string) == "Original clipboard data")
+        #expect(mockPb.string(forType: .string) == "New translated text")
     }
     
     @Test("TextReplacementService replaceSelectedText executes cleanly")
