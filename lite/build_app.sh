@@ -89,7 +89,7 @@ mkdir -p "${DMG_STAGING}"
 cp -R "${APP_BUNDLE}" "${DMG_STAGING}/"
 ln -s /Applications "${DMG_STAGING}/Applications" || true
 
-# Strip file flags and extended attributes to prevent macOS 15 hdiutil FB15923924 bug
+# Strip file flags and extended attributes
 chflags -R nouchg "${DMG_STAGING}" "${APP_BUNDLE}" 2>/dev/null || true
 xattr -rc "${DMG_STAGING}" "${APP_BUNDLE}" 2>/dev/null || true
 hdiutil detach "/Volumes/${APP_NAME}" -force 2>/dev/null || true
@@ -97,20 +97,16 @@ hdiutil detach "/Volumes/${APP_NAME}" -force 2>/dev/null || true
 rm -f "${DMG_NAME}"
 sync
 
-DMG_CREATED=0
-for attempt in 1 2 3; do
-    echo "Attempt $attempt: creating DMG with Applications shortcut..."
-    if hdiutil create -volname "${APP_NAME}" -srcfolder "${DMG_STAGING}" -ov -format UDZO -fs HFS+ -nospotlight "${DMG_NAME}"; then
-        DMG_CREATED=1
-        break
-    fi
-    echo "Attempt $attempt failed, retrying in 3 seconds..."
-    sleep 3
-done
+# Attempt with Applications shortcut first; fallback directly to APP_BUNDLE
+set +e
+hdiutil create -volname "${APP_NAME}" -srcfolder "${DMG_STAGING}" -ov -format UDZO "${DMG_NAME}" 2>/dev/null
+DMG_STATUS=$?
+set -e
 
-if [ "$DMG_CREATED" -ne 1 ]; then
-    echo "Fallback: creating DMG directly from app bundle..."
-    hdiutil create -volname "${APP_NAME}" -srcfolder "${APP_BUNDLE}" -ov -format UDZO -fs HFS+ -nospotlight "${DMG_NAME}" || true
+if [ $DMG_STATUS -ne 0 ] || [ ! -f "${DMG_NAME}" ]; then
+    echo "Staging folder packaging returned $DMG_STATUS; building DMG directly from app bundle..."
+    rm -f "${DMG_NAME}"
+    hdiutil create -volname "${APP_NAME}" -srcfolder "${APP_BUNDLE}" -ov -format UDZO "${DMG_NAME}"
 fi
 
 rm -rf "${DMG_STAGING}"
