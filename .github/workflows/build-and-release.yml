@@ -26,7 +26,9 @@ jobs:
           sudo xcode-select -s /Applications/Xcode_16.app/Contents/Developer 2>/dev/null || true
 
       - name: Verify Swift Toolchain
-        run: swift --version
+        run: |
+          swift --version
+          xcodebuild -version || true
 
       - name: Run Unit Tests
         run: |
@@ -36,10 +38,19 @@ jobs:
         run: |
           cd lite
           chmod +x build_app.sh
-          bash -x ./build_app.sh
-          if [ -f "MacTranslate.dmg" ]; then cp MacTranslate.dmg ../MacTranslate.dmg; fi
-          if [ -f "MacTranslate.zip" ]; then cp MacTranslate.zip ../MacTranslate.zip; fi
+          ./build_app.sh > ../build.log 2>&1 || BUILD_FAILED=1
           cd ..
+          cat build.log
+          echo "### Build Log" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          tail -n 100 build.log >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          if [ "$BUILD_FAILED" = "1" ]; then
+            echo "Build script failed!"
+            exit 1
+          fi
+          if [ -f "lite/MacTranslate.dmg" ]; then cp lite/MacTranslate.dmg MacTranslate.dmg; fi
+          if [ -f "lite/MacTranslate.zip" ]; then cp lite/MacTranslate.zip MacTranslate.zip; fi
           ls -la MacTranslate.*
 
       - name: Upload DMG & ZIP Artifacts
