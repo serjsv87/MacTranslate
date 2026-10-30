@@ -84,9 +84,14 @@ EOF
 
 echo "✓ ${APP_BUNDLE} created successfully!"
 
+echo "3.1. Signing and Cleaning App Bundle..."
+xattr -cr "${APP_BUNDLE}"
+codesign --force --deep --sign - "${APP_BUNDLE}"
+
 echo "4. Packaging Application..."
 ZIP_NAME="${APP_NAME}.zip"
-ditto -c -k --sequesterRsrc --keepParent "${APP_BUNDLE}" "${ZIP_NAME}"
+rm -f "${ZIP_NAME}"
+zip -r -y -X "${ZIP_NAME}" "${APP_BUNDLE}"
 echo "✓ ${ZIP_NAME} created successfully!"
 
 echo "Packaging into ${DMG_NAME}..."
