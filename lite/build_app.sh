@@ -15,9 +15,13 @@ DMG_NAME="${APP_NAME}.dmg"
 echo "1. Compiling Release Binary..."
 swift build -c release
 
-RELEASE_BIN=".build/release/${APP_NAME}"
+BIN_PATH="$(swift build -c release --show-bin-path)"
+RELEASE_BIN="${BIN_PATH}/${APP_NAME}"
 if [ ! -f "$RELEASE_BIN" ]; then
-    echo "Error: Release binary not found at $RELEASE_BIN"
+    RELEASE_BIN="$(find .build -type f -name "${APP_NAME}" -perm +111 2>/dev/null | grep -i release | head -n 1)"
+fi
+if [ -z "$RELEASE_BIN" ] || [ ! -f "$RELEASE_BIN" ]; then
+    echo "Error: Release binary not found for ${APP_NAME}"
     exit 1
 fi
 
