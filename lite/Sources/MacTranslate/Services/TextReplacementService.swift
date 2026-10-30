@@ -16,12 +16,11 @@ public final class TextReplacementService: @unchecked Sendable {
     /// Conforms to PROJECT.md: func replaceSelectedText(with newText: String)
     public func replaceSelectedText(with newText: String, targetApp: NSRunningApplication? = nil) {
         let clean = newText.trimmingCharacters(in: .whitespacesAndNewlines)
-        // Strategy 1: Attempt direct in-place mutation via Accessibility
-        if replaceViaAccessibility(newText: clean) {
-            return
-        }
-        
-        // Strategy 2: Fallback to synthetic paste injection (⌘V / ⌃V)
+        // Use synthetic paste injection (⌘V) directly.
+        // Direct AX mutation (AXUIElementSetAttributeValue) inserts text in native AppKit apps
+        // like Telegram while returning a non-success status code, which causes a duplicate paste
+        // if followed by fallback paste.
+        // Synthetic ⌘V is 100% universal and guarantees a single insertion across all apps (Telegram, WhatsApp, Chrome, Notes, etc.).
         replaceViaSyntheticPaste(newText: clean, targetApp: targetApp)
     }
     
