@@ -7,11 +7,12 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 ![Privacy: 100% Offline](https://img.shields.io/badge/Privacy-100%25%20Offline-success?style=flat-square)
 ![Engine: Apple Neural Engine](https://img.shields.io/badge/Inference-Apple%20Neural%20Engine-purple?style=flat-square)
+[![Give me coffee](https://img.shields.io/badge/☕%EF%B8%8F%20Give%20me%20coffee-TRC20-yellow?style=flat-square)](#️-give-me-coffee--support-the-project)
 
 **Ultra-fast, native macOS offline translation utility running locally on Apple Silicon.**  
 *Instant translation at your fingertips, just like DeepL — without cloud latency, character limits, or subscriptions.*
 
-[Why MacTranslate?](#-why-mactranslate-speed-convenience--zero-limits) • [Features](#-features) • [Lite vs Pro (soon)](#️-mactranslate-lite-vs-pro-soon) • [Shortcuts](#-keyboard-shortcuts) • [Installation](#-installation) • [Permissions](#-security--permissions)
+[Why MacTranslate?](#-why-mactranslate-speed-convenience--zero-limits) • [Features](#-features) • [Lite vs Pro (soon)](#️-mactranslate-lite-vs-pro-soon) • [Shortcuts](#-keyboard-shortcuts) • [Installation](#-installation) • [Permissions](#-security--permissions) • [Give me coffee ☕️](#️-give-me-coffee--support-the-project)
 
 </div>
 
@@ -138,6 +139,17 @@ cd MacTranslate/lite
 ./build_app.sh
 ```
 The compiled `MacTranslate.app` and `MacTranslate.dmg` will be generated directly in the `lite/` folder.
+
+---
+
+## ☕️ Give me coffee / Support the Project
+
+If you love **MacTranslate** and want to support its ongoing open-source development:
+
+* **Network**: `TRON (TRC20)`
+* **USDT Address**: `TByNXKW2VpECVUpTZFUbyo8YGgYsbC1HJV`
+
+Every cup of coffee helps keep MacTranslate fast, 100% offline, privacy-first, and freely available for everyone! 🚀
 
 ---
 

@@ -31,6 +31,13 @@ public final class SettingsWindowController: NSWindowController, NSWindowDelegat
     
     private let permissionsTipLabel = NSTextField(wrappingLabelWithString: "")
     
+    // Support (Give me coffee)
+    private let supportHeader = NSTextField(labelWithString: "")
+    private let supportDescLabel = NSTextField(wrappingLabelWithString: "")
+    private let trc20AddressField = NSTextField()
+    private let copyTRC20Button = NSButton(title: "", target: nil, action: nil)
+    private let supportFeedbackLabel = NSTextField(labelWithString: "")
+    
     // Section headers & labels to refresh on language change
     private let generalHeader = NSTextField(labelWithString: "")
     private let appLangLabel = NSTextField(labelWithString: "")
@@ -189,6 +196,39 @@ public final class SettingsWindowController: NSWindowController, NSWindowDelegat
         permissionsTipLabel.font = NSFont.systemFont(ofSize: 11)
         permissionsTipLabel.lineBreakMode = .byWordWrapping
         container.addArrangedSubview(permissionsTipLabel)
+        
+        // --- SECTION 5: SUPPORT / GIVE ME COFFEE ---
+        container.addArrangedSubview(makeSeparator())
+        container.addArrangedSubview(supportHeader)
+        
+        supportDescLabel.textColor = .secondaryLabelColor
+        supportDescLabel.font = NSFont.systemFont(ofSize: 11)
+        supportDescLabel.lineBreakMode = .byWordWrapping
+        container.addArrangedSubview(supportDescLabel)
+        
+        trc20AddressField.isEditable = false
+        trc20AddressField.isSelectable = true
+        trc20AddressField.stringValue = LocalizationManager.donationAddressTRC20
+        trc20AddressField.font = NSFont.monospacedSystemFont(ofSize: 11, weight: .regular)
+        trc20AddressField.textColor = .textColor
+        trc20AddressField.backgroundColor = NSColor.controlBackgroundColor.withAlphaComponent(0.5)
+        trc20AddressField.isBezeled = true
+        trc20AddressField.bezelStyle = .roundedBezel
+        
+        copyTRC20Button.bezelStyle = .rounded
+        copyTRC20Button.target = self
+        copyTRC20Button.action = #selector(copyTRC20Clicked)
+        
+        let supportRow = NSStackView(views: [trc20AddressField, copyTRC20Button])
+        supportRow.orientation = .horizontal
+        supportRow.spacing = 10
+        supportRow.alignment = .centerY
+        container.addArrangedSubview(supportRow)
+        
+        supportFeedbackLabel.textColor = .systemGreen
+        supportFeedbackLabel.font = NSFont.systemFont(ofSize: 11, weight: .semibold)
+        supportFeedbackLabel.isHidden = true
+        container.addArrangedSubview(supportFeedbackLabel)
     }
     
     private func refreshLocalization() {
@@ -234,7 +274,33 @@ public final class SettingsWindowController: NSWindowController, NSWindowDelegat
         axButton.title = L10n("settings.btn_open_ax")
         permissionsTipLabel.stringValue = L10n("settings.permissions_reset_tip")
         
+        styleHeader(supportHeader, text: L10n("settings.section_support"))
+        supportDescLabel.stringValue = L10n("settings.support_desc")
+        copyTRC20Button.title = "☕️ " + L10n("settings.btn_copy_trc20")
+        
         updateAXStatus()
+    }
+    
+    @objc private func copyTRC20Clicked() {
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(LocalizationManager.donationAddressTRC20, forType: .string)
+        
+        supportFeedbackLabel.stringValue = L10n("settings.support_copied")
+        supportFeedbackLabel.isHidden = false
+        supportFeedbackLabel.alphaValue = 1.0
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
+            guard let self = self else { return }
+            NSAnimationContext.runAnimationGroup { context in
+                context.duration = 0.5
+                self.supportFeedbackLabel.animator().alphaValue = 0.0
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                self?.supportFeedbackLabel.isHidden = true
+                self?.supportFeedbackLabel.alphaValue = 1.0
+            }
+        }
     }
     
     private func styleHeader(_ label: NSTextField, text: String) {

@@ -74,6 +74,7 @@ public final class HUDContentView: NSView {
     private let speakButton = NSButton()
     private let ocrButton = NSButton()
     private let historyButton = NSButton()
+    private let coffeeButton = NSButton()
     private let settingsButton = NSButton()
     private let downloadModelButton = NSButton()
     private let toneSegmentedControl = NSSegmentedControl()
@@ -142,6 +143,7 @@ public final class HUDContentView: NSView {
         copyButton.title = L10n("hud.copy")
         replaceButton.title = L10n("hud.replace")
         speakButton.toolTip = L10n("hud.speak_tooltip")
+        coffeeButton.toolTip = L10n("hud.coffee_tooltip")
         settingsButton.toolTip = L10n("hud.settings_tooltip")
         swapButton.toolTip = L10n("hud.swap_tooltip")
         closeButton.toolTip = L10n("hud.close_tooltip")
@@ -414,6 +416,14 @@ public final class HUDContentView: NSView {
         historyButton.action = #selector(historyClicked)
         addSubview(historyButton)
         
+        coffeeButton.translatesAutoresizingMaskIntoConstraints = false
+        coffeeButton.title = "☕️"
+        coffeeButton.toolTip = L10n("hud.coffee_tooltip")
+        coffeeButton.bezelStyle = .rounded
+        coffeeButton.target = self
+        coffeeButton.action = #selector(coffeeClicked)
+        addSubview(coffeeButton)
+        
         settingsButton.translatesAutoresizingMaskIntoConstraints = false
         settingsButton.title = "⚙"
         settingsButton.bezelStyle = .rounded
@@ -454,11 +464,23 @@ public final class HUDContentView: NSView {
             toastLabel.leadingAnchor.constraint(equalTo: historyButton.trailingAnchor, constant: 8),
             toastLabel.centerYAnchor.constraint(equalTo: copyButton.centerYAnchor),
             
+            coffeeButton.trailingAnchor.constraint(equalTo: settingsButton.leadingAnchor, constant: -6),
+            coffeeButton.centerYAnchor.constraint(equalTo: copyButton.centerYAnchor),
+            coffeeButton.widthAnchor.constraint(equalToConstant: 32),
+            coffeeButton.heightAnchor.constraint(equalToConstant: 28),
+            
             settingsButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -14),
             settingsButton.centerYAnchor.constraint(equalTo: copyButton.centerYAnchor),
             settingsButton.widthAnchor.constraint(equalToConstant: 32),
             settingsButton.heightAnchor.constraint(equalToConstant: 28)
         ])
+    }
+    
+    @objc private func coffeeClicked() {
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(LocalizationManager.donationAddressTRC20, forType: .string)
+        showToast(L10n("hud.toast_coffee_copied"))
     }
     
     @objc private func ocrClicked() {

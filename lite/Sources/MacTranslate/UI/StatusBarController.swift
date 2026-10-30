@@ -154,6 +154,11 @@ public final class StatusBarController: NSObject, NSMenuDelegate {
         settingsItem.target = self
         menu.addItem(settingsItem)
         
+        // Give me coffee (TRC20)
+        let coffeeItem = NSMenuItem(title: L10n("menu.coffee"), action: #selector(coffeeClicked), keyEquivalent: "")
+        coffeeItem.target = self
+        menu.addItem(coffeeItem)
+        
         // GitHub Repository
         let githubItem = NSMenuItem(title: L10n("menu.github"), action: #selector(githubClicked), keyEquivalent: "")
         githubItem.target = self
@@ -182,6 +187,18 @@ public final class StatusBarController: NSObject, NSMenuDelegate {
     
     @objc private func settingsClicked() {
         delegate?.statusBarControllerDidRequestOpenSettings(self)
+    }
+    
+    @objc private func coffeeClicked() {
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(LocalizationManager.donationAddressTRC20, forType: .string)
+        
+        let alert = NSAlert()
+        alert.messageText = L10n("settings.section_support")
+        alert.informativeText = "\(L10n("settings.support_desc"))\n\n\(LocalizationManager.donationAddressTRC20)\n\n\(L10n("settings.support_copied"))"
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
     }
     
     @objc private func githubClicked() {

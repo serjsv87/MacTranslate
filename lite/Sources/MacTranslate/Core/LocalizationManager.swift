@@ -17,6 +17,8 @@ public enum AppInterfaceLanguage: String, CaseIterable, Codable, Sendable {
 public final class LocalizationManager: @unchecked Sendable {
     public static let shared = LocalizationManager()
     public static let languageDidChangeNotification = Notification.Name("MacTranslateAppLanguageDidChangeNotification")
+    public static let donationAddressTRC20 = "TByNXKW2VpECVUpTZFUbyo8YGgYsbC1HJV"
+    public static let donationNetwork = "USDT (TRC20)"
     
     private let lock = NSLock()
     private var cachedLanguage: AppInterfaceLanguage = .system
@@ -90,12 +92,15 @@ public final class LocalizationManager: @unchecked Sendable {
             "hud.settings_tooltip": "Settings",
             "hud.swap_tooltip": "Swap languages",
             "hud.close_tooltip": "Close",
+            "hud.coffee_tooltip": "Give me coffee (TRC20): TByNXKW2VpECVUpTZFUbyo8YGgYsbC1HJV",
+            "hud.toast_coffee_copied": "☕️ TRC20 address copied! Thank you!",
             
             // Menu Bar
             "menu.header": "MacTranslate ⚡ Apple Neural Engine",
             "menu.translate_selection": "Translate Selection",
             "menu.screen_ocr_lite": "📷 Screen OCR Translation [PRO]",
             "menu.history_anki_lite": "📜 Vocabulary & Anki [PRO]",
+            "menu.coffee": "☕️ Give me coffee (TRC20)",
             "menu.settings": "Settings...",
             "menu.github": "GitHub Repository",
             "menu.about": "About MacTranslate",
@@ -144,7 +149,13 @@ public final class LocalizationManager: @unchecked Sendable {
             "settings.btn_open_ax": "Open Accessibility Settings",
             "settings.btn_open_screen": "Open Screen Recording Settings",
             "settings.permissions_reset_tip": "💡 Tip for App Updates: If shortcuts or OCR stop responding after an update, open the respective section above, remove (-) or toggle MacTranslate off/on, and restart the app.",
-            "settings.btn_open_privacy": "Open Privacy Settings"
+            "settings.btn_open_privacy": "Open Privacy Settings",
+            
+            // Support / Give me coffee
+            "settings.section_support": "☕️ Give me coffee / Support the Project",
+            "settings.support_desc": "If you enjoy using MacTranslate, consider supporting its development with a coffee via USDT (TRC20):",
+            "settings.btn_copy_trc20": "Copy TRC20 Address",
+            "settings.support_copied": "✓ TRC20 Address Copied! Thank you! ☕️"
         ],
         "uk": [
             // HUD
@@ -165,12 +176,15 @@ public final class LocalizationManager: @unchecked Sendable {
             "hud.settings_tooltip": "Налаштування",
             "hud.swap_tooltip": "Поміняти напрямок",
             "hud.close_tooltip": "Закрити",
+            "hud.coffee_tooltip": "Пригостити кавою (TRC20): TByNXKW2VpECVUpTZFUbyo8YGgYsbC1HJV",
+            "hud.toast_coffee_copied": "☕️ TRC20 адресу скопійовано! Дякую!",
             
             // Menu Bar
             "menu.header": "MacTranslate ⚡ Apple Neural Engine",
             "menu.translate_selection": "Перекласти виділене",
             "menu.screen_ocr_lite": "📷 Знімок екрана (OCR) [PRO]",
             "menu.history_anki_lite": "📜 Словник та Anki [PRO]",
+            "menu.coffee": "☕️ Пригостити кавою (TRC20)",
             "menu.settings": "Налаштування...",
             "menu.github": "Репозиторій на GitHub",
             "menu.about": "Про MacTranslate",
@@ -219,7 +233,13 @@ public final class LocalizationManager: @unchecked Sendable {
             "settings.btn_open_ax": "Відкрити «Універсальний доступ»",
             "settings.btn_open_screen": "Відкрити «Запис екрана»",
             "settings.permissions_reset_tip": "💡 Порада при оновленні: якщо після оновлення гарячі клавіші чи скріншот не реагують, перейдіть у потрібний розділ вище, вимкніть/увімкніть тумблер або видаліть (-) MacTranslate у налаштуваннях macOS і перезапустіть додаток.",
-            "settings.btn_open_privacy": "Відкрити налаштування приватності"
+            "settings.btn_open_privacy": "Відкрити налаштування приватності",
+            
+            // Support / Give me coffee
+            "settings.section_support": "☕️ Give me coffee / Підтримати проєкт",
+            "settings.support_desc": "Подобається MacTranslate? Ви можете підтримати розвиток проєкту та пригостити автора кавою через USDT (TRC20):",
+            "settings.btn_copy_trc20": "Скопіювати адресу TRC20",
+            "settings.support_copied": "✓ Адресу TRC20 скопійовано! Дякуємо за каву! ☕️"
         ]
     ]
 }
