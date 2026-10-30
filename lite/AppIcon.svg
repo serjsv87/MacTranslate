@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Deep macOS Gradient: Royal Blue to Midnight Slate -->
+    <linearGradient id="bgGrad" x1="512" y1="100" x2="512" y2="924" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2563EB"/>
+      <stop offset="35%" stop-color="#1D4ED8"/>
+      <stop offset="70%" stop-color="#1E3A8A"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+
+    <!-- Squircle Top Inner Highlight -->
+    <linearGradient id="innerBezel" x1="512" y1="100" x2="512" y2="924" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.35"/>
+      <stop offset="15%" stop-color="#93C5FD" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.04"/>
+    </linearGradient>
+
+    <!-- Front Card (Crisp Pearl White) -->
+    <linearGradient id="cardWhite" x1="180" y1="240" x2="560" y2="610" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#F1F5F9"/>
+    </linearGradient>
+
+    <!-- Back Card (Vibrant Electric Cyan-Azure) -->
+    <linearGradient id="cardBlue" x1="464" y1="390" x2="844" y2="760" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="55%" stop-color="#0284C7"/>
+      <stop offset="100%" stop-color="#0369A1"/>
+    </linearGradient>
+
+    <!-- Golden Speed Lightning Bolt -->
+    <linearGradient id="boltGrad" x1="512" y1="350" x2="512" y2="660" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FEF08A"/>
+      <stop offset="35%" stop-color="#FACC15"/>
+      <stop offset="100%" stop-color="#EA580C"/>
+    </linearGradient>
+
+    <!-- Base Squircle Shadow -->
+    <filter id="shadowSquircle" x="40" y="50" width="944" height="944" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="30" stdDeviation="32" flood-color="#020617" flood-opacity="0.65"/>
+    </filter>
+
+    <!-- Left Card Shadow -->
+    <filter id="shadowCard1" x="130" y="190" width="490" height="490" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#020617" flood-opacity="0.45"/>
+    </filter>
+
+    <!-- Right Card Shadow -->
+    <filter id="shadowCard2" x="420" y="350" width="490" height="490" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="22" stdDeviation="26" flood-color="#020617" flood-opacity="0.5"/>
+    </filter>
+
+    <!-- Lightning Glow -->
+    <filter id="boltFilter" x="400" y="340" width="224" height="340" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="0" stdDeviation="16" flood-color="#F59E0B" flood-opacity="0.9"/>
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- 1. Squircle Base -->
+  <rect x="100" y="100" width="824" height="824" rx="190" fill="url(#bgGrad)" filter="url(#shadowSquircle)"/>
+  
+  <!-- Subtle Internal Radial Glow -->
+  <circle cx="512" cy="512" r="340" fill="#3B82F6" opacity="0.25"/>
+
+  <!-- Squircle Bezel Stroke -->
+  <rect x="100" y="100" width="824" height="824" rx="190" stroke="url(#innerBezel)" stroke-width="3"/>
+
+  <!-- 2. Back Card (Right: '文') -->
+  <g filter="url(#shadowCard2)">
+    <rect x="464" y="390" width="380" height="370" rx="78" fill="url(#cardBlue)"/>
+    <rect x="464" y="390" width="380" height="370" rx="78" stroke="#BAE6FD" stroke-width="3" stroke-opacity="0.75"/>
+    <text x="654" y="648" font-family="-apple-system, PingFang SC, Hiragino Sans, sans-serif" font-weight="900" font-size="215" fill="#FFFFFF" text-anchor="middle">文</text>
+  </g>
+
+  <!-- 3. Front Card (Left: 'A') -->
+  <g filter="url(#shadowCard1)">
+    <rect x="180" y="240" width="380" height="370" rx="78" fill="url(#cardWhite)"/>
+    <rect x="180" y="240" width="380" height="370" rx="78" stroke="#FFFFFF" stroke-width="3"/>
+    <text x="370" y="508" font-family="-apple-system, SF Pro Display, Helvetica Neue, Arial, sans-serif" font-weight="900" font-size="225" fill="#1E3A8A" text-anchor="middle">A</text>
+  </g>
+
+  <!-- 4. Neural Engine Lightning Bolt -->
+  <g filter="url(#boltFilter)">
+    <path d="M538 365 L454 515 L518 515 L470 645 L570 482 L506 482 Z" fill="url(#boltGrad)" stroke="#FFFFFF" stroke-width="3.5" stroke-linejoin="round"/>
+  </g>
+</svg>
