@@ -409,16 +409,18 @@ public final class HotkeyManager: @unchecked Sendable {
         )
         guard status == noErr else { return }
         
-        // Register Option+Space globally (kVK_Space = 49, optionKey = 0x0800)
-        let altID = EventHotKeyID(signature: OSType(0x4D545241), id: 1002)
-        RegisterEventHotKey(
-            UInt32(kVK_Space),
-            UInt32(optionKey),
-            altID,
-            GetEventDispatcherTarget(),
-            0,
-            &alternateHotKeyRef
-        )
+        // Register Option+Space globally only if alternate mode is explicitly configured
+        if mode == .alternate {
+            let altID = EventHotKeyID(signature: OSType(0x4D545241), id: 1002)
+            RegisterEventHotKey(
+                UInt32(kVK_Space),
+                UInt32(optionKey),
+                altID,
+                GetEventDispatcherTarget(),
+                0,
+                &alternateHotKeyRef
+            )
+        }
     }
     
     private func uninstallCarbonHotKeys() {

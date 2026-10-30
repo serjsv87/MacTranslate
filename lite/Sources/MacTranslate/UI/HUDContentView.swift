@@ -144,7 +144,7 @@ public final class HUDContentView: NSView {
         replaceButton.title = L10n("hud.replace")
         speakButton.toolTip = L10n("hud.speak_tooltip")
         coffeeButton.toolTip = L10n("hud.coffee_tooltip")
-        settingsButton.toolTip = L10n("hud.settings_tooltip")
+        settingsButton.toolTip = "\(L10n("hud.settings_tooltip")) (v\(UpdateChecker.currentVersion))"
         swapButton.toolTip = L10n("hud.swap_tooltip")
         closeButton.toolTip = L10n("hud.close_tooltip")
         downloadModelButton.title = L10n("hud.btn_download_model")

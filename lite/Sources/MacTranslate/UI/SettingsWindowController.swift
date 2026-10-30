@@ -38,6 +38,11 @@ public final class SettingsWindowController: NSWindowController, NSWindowDelegat
     private let copyTRC20Button = NSButton(title: "", target: nil, action: nil)
     private let supportFeedbackLabel = NSTextField(labelWithString: "")
     
+    // About & Version
+    private let aboutHeader = NSTextField(labelWithString: "")
+    private let versionLabel = NSTextField(labelWithString: "")
+    private let checkUpdatesButton = NSButton(title: "", target: nil, action: nil)
+    
     // Section headers & labels to refresh on language change
     private let generalHeader = NSTextField(labelWithString: "")
     private let appLangLabel = NSTextField(labelWithString: "")
@@ -229,6 +234,21 @@ public final class SettingsWindowController: NSWindowController, NSWindowDelegat
         supportFeedbackLabel.font = NSFont.systemFont(ofSize: 11, weight: .semibold)
         supportFeedbackLabel.isHidden = true
         container.addArrangedSubview(supportFeedbackLabel)
+        
+        // --- SECTION 6: ABOUT & VERSION ---
+        container.addArrangedSubview(makeSeparator())
+        container.addArrangedSubview(aboutHeader)
+        
+        versionLabel.font = NSFont.systemFont(ofSize: 12, weight: .medium)
+        checkUpdatesButton.bezelStyle = .rounded
+        checkUpdatesButton.target = self
+        checkUpdatesButton.action = #selector(checkUpdatesClicked)
+        
+        let versionRow = NSStackView(views: [versionLabel, checkUpdatesButton])
+        versionRow.orientation = .horizontal
+        versionRow.spacing = 12
+        versionRow.alignment = .centerY
+        container.addArrangedSubview(versionRow)
     }
     
     private func refreshLocalization() {
@@ -278,7 +298,15 @@ public final class SettingsWindowController: NSWindowController, NSWindowDelegat
         supportDescLabel.stringValue = L10n("settings.support_desc")
         copyTRC20Button.title = "☕️ " + L10n("settings.btn_copy_trc20")
         
+        styleHeader(aboutHeader, text: L10n("settings.section_about"))
+        versionLabel.stringValue = "\(L10n("settings.version_label")) v\(UpdateChecker.currentVersion)"
+        checkUpdatesButton.title = L10n("settings.btn_check_updates")
+        
         updateAXStatus()
+    }
+    
+    @objc private func checkUpdatesClicked() {
+        UpdateChecker.shared.checkForUpdates(force: true, showUpToDateAlert: true)
     }
     
     @objc private func copyTRC20Clicked() {

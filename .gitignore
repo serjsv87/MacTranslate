@@ -5,6 +5,8 @@
 */*.app/
 *.dmg
 */*.dmg
+*.zip
+*/*.zip
 Packages/
 xcuserdata/
 DerivedData/

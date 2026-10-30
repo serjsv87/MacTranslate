@@ -155,7 +155,21 @@ public final class LocalizationManager: @unchecked Sendable {
             "settings.section_support": "☕️ Give me coffee / Support the Project",
             "settings.support_desc": "If you enjoy using MacTranslate, consider supporting its development with a coffee via USDT (TRC20):",
             "settings.btn_copy_trc20": "Copy TRC20 Address",
-            "settings.support_copied": "✓ TRC20 Address Copied! Thank you! ☕️"
+            "settings.support_copied": "✓ TRC20 Address Copied! Thank you! ☕️",
+            
+            // Updates & Version
+            "menu.check_updates": "Check for Updates...",
+            "settings.section_about": "About & Version",
+            "settings.version_label": "Version:",
+            "settings.btn_check_updates": "Check for Updates",
+            "update.new_version_title": "New Version Available",
+            "update.new_version_desc": "A new release of MacTranslate is available on GitHub:",
+            "update.btn_download": "Download Update",
+            "update.btn_later": "Later",
+            "update.up_to_date_title": "MacTranslate is Up to Date",
+            "update.up_to_date_desc": "You are running the latest version.",
+            "update.check_failed_title": "Update Check Failed",
+            "update.check_failed_desc": "Could not connect to GitHub. Please check your internet connection."
         ],
         "uk": [
             // HUD
@@ -239,7 +253,21 @@ public final class LocalizationManager: @unchecked Sendable {
             "settings.section_support": "☕️ Give me coffee / Підтримати проєкт",
             "settings.support_desc": "Подобається MacTranslate? Ви можете підтримати розвиток проєкту та пригостити автора кавою через USDT (TRC20):",
             "settings.btn_copy_trc20": "Скопіювати адресу TRC20",
-            "settings.support_copied": "✓ Адресу TRC20 скопійовано! Дякуємо за каву! ☕️"
+            "settings.support_copied": "✓ Адресу TRC20 скопійовано! Дякуємо за каву! ☕️",
+            
+            // Updates & Version
+            "menu.check_updates": "Перевірити наявність оновлень...",
+            "settings.section_about": "Про програму та версія",
+            "settings.version_label": "Версія:",
+            "settings.btn_check_updates": "Перевірити оновлення",
+            "update.new_version_title": "Доступна нова версія",
+            "update.new_version_desc": "На GitHub вийшов новий реліз MacTranslate:",
+            "update.btn_download": "Завантажити оновлення",
+            "update.btn_later": "Пізніше",
+            "update.up_to_date_title": "У вас найновіша версія",
+            "update.up_to_date_desc": "MacTranslate оновлено до актуальної версії.",
+            "update.check_failed_title": "Помилка перевірки оновлень",
+            "update.check_failed_desc": "Не вдалося з'єднатися з GitHub. Перевірте підключення до інтернету."
         ]
     ]
 }

@@ -54,7 +54,7 @@ public final class StatusBarController: NSObject, NSMenuDelegate {
     public func buildMenu() {
         menu.removeAllItems()
         
-        let headerItem = NSMenuItem(title: "MacTranslate ⚡ Apple Neural Engine", action: nil, keyEquivalent: "")
+        let headerItem = NSMenuItem(title: "MacTranslate v\(UpdateChecker.currentVersion) ⚡", action: nil, keyEquivalent: "")
         headerItem.isEnabled = false
         menu.addItem(headerItem)
         
@@ -154,6 +154,11 @@ public final class StatusBarController: NSObject, NSMenuDelegate {
         settingsItem.target = self
         menu.addItem(settingsItem)
         
+        // Check for updates
+        let updateItem = NSMenuItem(title: L10n("menu.check_updates"), action: #selector(checkUpdatesClicked), keyEquivalent: "")
+        updateItem.target = self
+        menu.addItem(updateItem)
+        
         // Give me coffee (TRC20)
         let coffeeItem = NSMenuItem(title: L10n("menu.coffee"), action: #selector(coffeeClicked), keyEquivalent: "")
         coffeeItem.target = self
@@ -187,6 +192,10 @@ public final class StatusBarController: NSObject, NSMenuDelegate {
     
     @objc private func settingsClicked() {
         delegate?.statusBarControllerDidRequestOpenSettings(self)
+    }
+    
+    @objc private func checkUpdatesClicked() {
+        UpdateChecker.shared.checkForUpdates(force: true, showUpToDateAlert: true)
     }
     
     @objc private func coffeeClicked() {

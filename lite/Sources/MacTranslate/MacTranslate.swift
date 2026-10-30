@@ -23,6 +23,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, HUDContentViewDelegate
         
         setupComponents()
         setupHotkeys()
+        
+        // Check for updates on startup (at most once every 24h, or on explicit request)
+        UpdateChecker.shared.checkForUpdates()
         setupAppFocusTracking()
     }
     

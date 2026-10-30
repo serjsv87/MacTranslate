@@ -12,6 +12,13 @@ APP_NAME="MacTranslate"
 APP_BUNDLE="${APP_NAME}.app"
 DMG_NAME="${APP_NAME}.dmg"
 
+APP_VERSION="$(git describe --tags --always 2>/dev/null | sed 's/^v//' || echo "1.0.3")"
+if [ -z "$APP_VERSION" ]; then
+    APP_VERSION="1.0.3"
+fi
+
+echo "Building version: ${APP_VERSION}"
+
 echo "1. Compiling Release Binary..."
 swift build -c release
 
@@ -38,7 +45,7 @@ if [ -f "AppIcon.icns" ]; then
 fi
 
 echo "3. Writing Info.plist..."
-cat << 'EOF' > "${APP_BUNDLE}/Contents/Info.plist"
+cat << EOF > "${APP_BUNDLE}/Contents/Info.plist"
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -60,7 +67,7 @@ cat << 'EOF' > "${APP_BUNDLE}/Contents/Info.plist"
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0.0</string>
+    <string>${APP_VERSION}</string>
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>LSMinimumSystemVersion</key>
